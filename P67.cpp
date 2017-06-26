@@ -4,7 +4,7 @@
 using namespace std;
 
 int main() {
-    ifstream infile("P18.txt");
+    ifstream infile("P67.txt");
     string line;
     int n;
     vector<vector<int>> v;
