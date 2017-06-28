@@ -2,6 +2,61 @@
 
 using namespace std;
 
+vector<int> sieveEratosthenes(int size) {
+    vector<int> out(size, 1);
+    out[0] = 0;
+    out[1] = 0;
+    int nextPrime = 2;
+    for(int i = nextPrime * 2; i <= size; i += nextPrime) {
+        out[i] = 0; 
+    }
+    nextPrime++;
+    while(nextPrime <= size) {
+        for(int i = nextPrime * 2; i <= size; i += nextPrime) {
+            out[i] = 0; 
+        } 
+        do {
+            nextPrime += 2;
+        } while(nextPrime <= size && out[nextPrime] == 0);
+    }
+    return out;
+}
+
+int sumOfProperFactors(int n) {
+    int tmp = sqrt(n); 
+    int sum = 1;
+    for(int i=2; i <= tmp; i++) {
+        int x = n % i;
+        if(n % i == 0) {
+            if(i * i == n) {
+                sum += tmp;
+            }
+            else {
+                sum += i;
+                sum += n / i;
+            }
+        }
+    }
+    return sum;
+}
+
+bool isAbundant(int n) {
+    return sumOfProperFactors(n) > n;
+}
+
+vector<string> parseCSV(string filename) {
+    ifstream infile(filename);
+    string line;
+    int n;
+    vector<string> out;
+    while(getline(infile, line, ',')) {
+        // for CSV with quotes around the string
+        //out.emplace_back(line);
+        out.emplace_back(line.substr(1, line.size()-2));
+    }
+    return out;
+}
+
 int makeEqualLength(string &str1, string &str2)
 {
     int len1 = str1.size();
@@ -56,7 +111,7 @@ std::string add_string(std::string a, std::string b) {
         if (result > 9) carry = true;
         out += std::to_string(result % 10);
     }
-    
+
     if(carry) out += '1';
 
     // did the calculation in reverse
@@ -81,7 +136,7 @@ std::string subtract2(std::string a, std::string b) {
             reduce = true;
             top += 10;
         }
-            out += std::to_string(top - bot);
+        out += std::to_string(top - bot);
     }
 
     // did the calculation in reverse
@@ -101,9 +156,6 @@ std::string multiplyiSingleBit(string a, string b) {
 
 std::string karatsuba(std::string x, std::string y) {
     int n = makeEqualLength(x,y);
-    //cout << "x: " << x << '\n';
-    //cout << "y: " << y << '\n';
-    //cout << "n: " << n << '\n';
 
     // Base cases
     if (n == 0) return "0";
@@ -118,41 +170,24 @@ std::string karatsuba(std::string x, std::string y) {
         b = x.substr(n/2+1);
     }
     if(y.length() % 2 == 0) {
-    c = y.substr(0, n/2);
-    d = y.substr(n/2);
+        c = y.substr(0, n/2);
+        d = y.substr(n/2);
     } else {
-    c = y.substr(0, n/2+1);
-    d = y.substr(n/2+1);
+        c = y.substr(0, n/2+1);
+        d = y.substr(n/2+1);
     }
-
-    //cout << "a: " << a << '\n';
-    //cout << "b: " << b << '\n';
-    //cout << "c: " << c << '\n';
-    //cout << "d: " << d << '\n';
-    //cout << "n: " << n << '\n';
 
     if (n == 2) {
         int ac = stoi(a) * stoi(c);
         int bd = stoi(b) * stoi(d);
-        //cout << "ac: " << ac << '\n'; 
-        //cout << "bd: " << bd << '\n'; 
         int abcd = (stoi(a) + stoi(b)) * (stoi(c) + stoi(d));
-        //cout << "abcd: " << abcd << '\n';
-        //cout << std::to_string(ac * (int)std::pow(10,n) + (abcd - ac - bd) * (int)std::pow(10,n/2) + bd) << '\n';
-        //cout << "N: " << n << '\n';
         return std::to_string(ac * (int)std::pow(10,n) + (abcd - ac - bd) * (int)std::pow(10,n/2) + bd);
     }
 
     std::string ac = karatsuba(a,c);
     std::string bd = karatsuba(b,d);
 
-    //cout << "ac: " << ac << '\n';
-    //cout << "bd: " << bd << '\n';
-    //cout << "ab: " << add_string(a,b) << '\n';
-    //cout << "cd: " << add_string(c,d) << '\n';
     std::string abcd = karatsuba(add_string(a,b),add_string(c,d));
-    //cout << "abcd: " << abcd << '\n';
-    //cout << "n: " << n << '\n';
 
     int tmp = n / 2;
     return trimLeadingZeroes(add_string(add_string(add_zeroes(ac,2 * tmp), add_zeroes(subtract_string(abcd, ac, bd), tmp)), bd));
@@ -165,34 +200,4 @@ std::string factorial(int n) {
     while(cnt++ < n) {
         dyn[cnt - 1] = trimLeadingZeroes((karatsuba(dyn[cnt-2], to_string(cnt)))); }
     return dyn[n-1];
-}
-
-int main() {
-    // test add_string
-    /* cout << "add 1234 to 5678: " << add_string("1234", "5678") << '\n'; */
-    /* cout << "add 99 to 99: " << add_string("99", "99") << '\n'; */
-    /* cout << "add 88888888888888888 to 222222222222: " << add_string("88888888888888888", "222222222222") << '\n'; */
-
-    // test subtract_string
-    /* cout << "subtract 7 from 9 : " << subtract2("9", "7") << '\n'; */
-    /* cout << "subtract 678 and 7 from 999: " << subtract_string("999", "678", "7") << '\n'; */
-    /* cout << "subtract 99 and 99 from 200: " << subtract_string("200", "99", "99") << '\n'; */
-    /* cout << "subtract 4 and 204 from 350: " << subtract_string("350", "4", "204") << '\n'; */
-    // test karatsuba
-    //std::cout << "multiply 15 by 15 (225): " << karatsuba("15","15") << '\n';
-    //std::cout << "multiply 15 by 15 (225): " << karatsuba("100","100") << '\n';
-    ///* std::cout << "multiply 1234 by 5678 (7006652): " << karatsuba("5678","1234", 4) << '\n'; */
-    string x = karatsuba("46", "13423423");
-    std::cout << "multiply 46 by 13423423 (7006652): " << x << '\n';
-    x = karatsuba("432141", "333");
-    std::cout << "multiply 432141 by 333 (143902953): " << x << '\n';
-    /* std::cout << "multiply 11111111 by 11111111: " << karatsuba("11111111","11111111", 8) << '\n'; */
-    /* std::cout << "multiply stuff: " << karatsuba("3141592653589793238462643383279502884197169399375105820974944592","2718281828459045235360287471352662497757247093699959574966967627", 64) << '\n'; */
-
-    //string s = factorial(100);
-    //int res = 0;
-    //for(auto &i: s) {
-    //    res += (i - '0');
-    //}
-    //cout << res << '\n';
 }
