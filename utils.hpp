@@ -1,6 +1,15 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+string karatsuba(string x, string y);
+
+string exponentStr(string a, string b) {
+  string out = "1";
+  for(int i=0; i < stoi(b); i++) {
+    out = karatsuba(out, a);
+  }
+  return out;
+}
 
 vector<int> sieveEratosthenes(int size) {
     vector<int> out(size, 1);
