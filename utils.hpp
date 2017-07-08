@@ -4,11 +4,21 @@ using namespace std;
 string karatsuba(string x, string y);
 
 string exponentStr(string a, string b) {
-  string out = "1";
-  for(int i=0; i < stoi(b); i++) {
-    out = karatsuba(out, a);
-  }
-  return out;
+    string out = "1";
+    for(int i=0; i < stoi(b); i++) {
+        out = karatsuba(out, a);
+    }
+    return out;
+}
+
+int fib(int n) {
+    vector<int> fib(n,0);
+    fib[0] = 1;
+    fib[1] = 1;
+    for(int i=2; i < n; i++) {
+        fib[i] = fib[i-1] + fib[i-2]; 
+    }
+    return fib[fib.size()-1];
 }
 
 vector<int> sieveEratosthenes(int size) {
