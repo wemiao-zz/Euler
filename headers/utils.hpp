@@ -1,6 +1,20 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+
+int gcd(int a, int b) {
+    if(b == 0) return a;
+    return gcd(b, a % b);
+}
+
+int lcm(int a, int b) {
+    return (a * b) / gcd(a, b);
+}
+
+pair<int, int> lcf(int a, int b) {
+    return make_pair(a / gcd(a,b), b / gcd(a,b));
+}
+
 string karatsuba(string x, string y);
 
 string exponentStr(string a, string b) {
@@ -39,6 +53,19 @@ vector<int> sieveEratosthenes(int size) {
         } while(nextPrime <= size && out[nextPrime] == 0);
     }
     return out;
+}
+
+int countDigits(int i) {
+    int digits = 0;
+    while(i > 0) {
+        digits++;
+        i /= 10;
+    }
+    return digits;
+}
+
+int rotateNumber(int i) {
+    return (i % 10) * pow(10, countDigits(i) - 1) + i / 10;
 }
 
 int sumOfProperFactors(int n) {
@@ -213,6 +240,7 @@ std::string karatsuba(std::string x, std::string y) {
 }
 
 std::string factorial(int n) {
+    if(n == 0) return "1"; // 0! = 1
     vector<string> dyn(n);
     dyn[0] = "1";
     int cnt = 1;
