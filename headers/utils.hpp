@@ -68,6 +68,30 @@ int rotateNumber(int i) {
     return (i % 10) * pow(10, countDigits(i) - 1) + i / 10;
 }
 
+bool isPalindrome(int x) {
+    string s = to_string(x);
+    for(int i=0; i < s.size() / 2; i++) {
+        if(s[i] != s[s.size()-1-i]) return false; 
+    }
+    return true;
+}
+
+bool isPalindrome(vector<int> x) {
+    for(int i=0; i < x.size() / 2; i++) {
+        if(x[i] != x[x.size()-1-i]) return false; 
+    }
+    return true;
+}
+
+vector<int> decToBinary(int x) {
+    vector<int> out;
+    while(x > 0) {
+        out.emplace_back(x % 2 == 1 ? 1 : 0);
+        x /= 2;
+    }
+    return out;
+}
+
 int sumOfProperFactors(int n) {
     int tmp = sqrt(n); 
     int sum = 1;
