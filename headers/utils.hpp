@@ -25,6 +25,29 @@ string exponentStr(string a, string b) {
     return out;
 }
 
+// returns a map of sums of perimeters 
+unordered_map<int,int> pythagorean_triplets(int size) {
+    unordered_map<int,int> out;
+    int a=3;
+    int b=4;
+    int c;
+    float tmp;
+    while(a < size) {
+        tmp = sqrt(a * a + b * b);
+        if (std::floor(tmp) - tmp == 0) {
+            c = tmp;
+            // cout << "(" << a << ", " << b << ", " << c << ")" << '\n';
+            out[a+b+c]++;
+        } 
+        b++;
+        if (sqrt(a*a + b * b) > size) {
+            a++;
+            b = a + 1;
+        }
+    }
+    return out;
+}
+
 int fib(int n) {
     vector<int> fib(n,0);
     fib[0] = 1;
