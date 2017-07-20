@@ -58,6 +58,7 @@ int fib(int n) {
     return fib[fib.size()-1];
 }
 
+
 vector<int> sieveEratosthenes(int size) {
     vector<int> out(size, 1);
     out[0] = 0;
@@ -76,6 +77,25 @@ vector<int> sieveEratosthenes(int size) {
         } while(nextPrime <= size && out[nextPrime] == 0);
     }
     return out;
+}
+unordered_map<int,int> primeFactorization(int factor) {
+    vector<int> primes = sieveEratosthenes(sqrt(factor) + 1);
+    vector<int> primesList;
+    primesList.emplace_back(2);
+    for(int i=3; i < primes.size(); i+=2) {
+        if(primes[i]) primesList.emplace_back(i); 
+    }
+
+    unordered_map<int,int> factors;
+    for(auto &i: primesList) {
+        while(factor % i == 0 && factor != 1) {
+            factors[i]++;
+            factor /= i;
+        }
+        if (factor == 1) break;
+    }
+    if(factor != 1) factors[factor]++;
+    return factors;
 }
 
 int countDigits(int i) {
