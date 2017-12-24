@@ -3,12 +3,19 @@
 using namespace std;
 
 bool isWin(bitset<52> h1, bitset<52> h2) {
-    string flush = "1111111111111";
-    bitset<13> checkFlush(flush);
+    int bitsSet, bitsSet2;
+    for(int i=0; i < 4; i++) {
+        bitsSet = 0;
+        bitsSet2 = 0;
+        for(int j=0; j < 13; j++) {
+            if(h1.test(13*i + j)) bitsSet++;
+            if(h2.test(13*i + j)) bitsSet2++;
+        }
 
-
-
-
+        cout << bitsSet << '\n';
+        cout << bitsSet2 << '\n';
+    }
+    return false;
 }
 
 int parse(string n) {
